@@ -1,0 +1,134 @@
+[
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0001",
+    "FechaExpedicionFactura": "02-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "21.00",
+    "ImporteTotal": "121.00",
+    "Huella": "",
+    "FechaHoraHusoGenRegistro": "2025-01-02T10:00:00+01:00",
+    "HuellaPropia": "BD728770E9C27E105AB1F144D5729D0D02290F5472A47BC41A7AB0673586F343"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0002",
+    "FechaExpedicionFactura": "03-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "28.82",
+    "ImporteTotal": "166.07",
+    "Huella": "BD728770E9C27E105AB1F144D5729D0D02290F5472A47BC41A7AB0673586F343",
+    "FechaHoraHusoGenRegistro": "2025-01-03T10:00:00+01:00",
+    "HuellaPropia": "B2BE8F4DE8D9513204954782A0DAAA0BFCFCC6FE5000FD0AF97D3F7150AFF8B4"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0003",
+    "FechaExpedicionFactura": "04-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "36.65",
+    "ImporteTotal": "211.15",
+    "Huella": "B2BE8F4DE8D9513204954782A0DAAA0BFCFCC6FE5000FD0AF97D3F7150AFF8B4",
+    "FechaHoraHusoGenRegistro": "2025-01-04T10:00:00+01:00",
+    "HuellaPropia": "92422E54787CBD9C4D55E8325B3386D8B456A270BD01A5C35DC120E3BF9AE246"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0004",
+    "FechaExpedicionFactura": "05-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "44.47",
+    "ImporteTotal": "256.22",
+    "Huella": "92422E54787CBD9C4D55E8325B3386D8B456A270BD01A5C35DC120E3BF9AE246",
+    "FechaHoraHusoGenRegistro": "2025-01-05T10:00:00+01:00",
+    "HuellaPropia": "04FB050735B0C799E9CE8CE2BD964707BF2B937FBA3459D9D2FE3EDFAB2589FD"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0005",
+    "FechaExpedicionFactura": "06-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "52.29",
+    "ImporteTotal": "301.29",
+    "Huella": "04FB050735B0C799E9CE8CE2BD964707BF2B937FBA3459D9D2FE3EDFAB2589FD",
+    "FechaHoraHusoGenRegistro": "2025-01-06T10:00:00+01:00",
+    "HuellaPropia": "26D4B49C33730AD38CBE7613E3B9075CC0CE14D49299DDDC71DC129C7BFEDC85"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0006",
+    "FechaExpedicionFactura": "07-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "60.11",
+    "ImporteTotal": "346.36",
+    "Huella": "26D4B49C33730AD38CBE7613E3B9075CC0CE14D49299DDDC71DC129C7BFEDC85",
+    "FechaHoraHusoGenRegistro": "2025-01-07T10:00:00+01:00",
+    "HuellaPropia": "B61D105B10117B6B8413A62B299179018E3A0C6534C71664DFD60B17805296FB"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0007",
+    "FechaExpedicionFactura": "08-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "67.94",
+    "ImporteTotal": "391.44",
+    "Huella": "B61D105B10117B6B8413A62B299179018E3A0C6534C71664DFD60B17805296FB",
+    "FechaHoraHusoGenRegistro": "2025-01-08T10:00:00+01:00",
+    "HuellaPropia": "D809BEE2761463FDBC8C306EBB30D50D7DA493A7FA015037AC88C3EF2F0EC813"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0008",
+    "FechaExpedicionFactura": "09-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "75.76",
+    "ImporteTotal": "436.51",
+    "Huella": "D809BEE2761463FDBC8C306EBB30D50D7DA493A7FA015037AC88C3EF2F0EC813",
+    "FechaHoraHusoGenRegistro": "2025-01-09T10:00:00+01:00",
+    "HuellaPropia": "A1BC548705F78BFB1791590687969A692F28A3611A4CBD46C39BA334F2B82F2A"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0009",
+    "FechaExpedicionFactura": "10-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "83.58",
+    "ImporteTotal": "481.58",
+    "Huella": "A1BC548705F78BFB1791590687969A692F28A3611A4CBD46C39BA334F2B82F2A",
+    "FechaHoraHusoGenRegistro": "2025-01-10T10:00:00+01:00",
+    "HuellaPropia": "C1175F3471C7626CFD1278A903DBECEE980CDF20FE4949880A78A7F6ADFFDBE3"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0010",
+    "FechaExpedicionFactura": "11-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "91.40",
+    "ImporteTotal": "526.65",
+    "Huella": "C1175F3471C7626CFD1278A903DBECEE980CDF20FE4949880A78A7F6ADFFDBE3",
+    "FechaHoraHusoGenRegistro": "2025-01-11T10:00:00+01:00",
+    "HuellaPropia": "70C7E72C5F4B97170FFC102756CA5F598B4022AFE645D4CE0355941FBEA3B603"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0011",
+    "FechaExpedicionFactura": "12-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "99.23",
+    "ImporteTotal": "571.73",
+    "Huella": "70C7E72C5F4B97170FFC102756CA5F598B4022AFE645D4CE0355941FBEA3B603",
+    "FechaHoraHusoGenRegistro": "2025-01-12T10:00:00+01:00",
+    "HuellaPropia": "DC6B7B7FFAC60CB4AAA5308E4E39C8D26326FE666C2A96D2CC9A9CC8789520FB"
+  },
+  {
+    "IDEmisorFactura": "00000000T",
+    "NumSerieFactura": "PRUEBA-2025-0012",
+    "FechaExpedicionFactura": "13-01-2025",
+    "TipoFactura": "F1",
+    "CuotaTotal": "107.05",
+    "ImporteTotal": "616.80",
+    "Huella": "DC6B7B7FFAC60CB4AAA5308E4E39C8D26326FE666C2A96D2CC9A9CC8789520FB",
+    "FechaHoraHusoGenRegistro": "2025-01-13T10:00:00+01:00",
+    "HuellaPropia": "C04A67B9782A1B1DFEA0EFCDD21A627E8C756BE3C2B34E1D790FC5562389E038"
+  }
+]
