@@ -1,11 +1,12 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "validador-verifactu"
 version = "0.1.0"
 description = "Valida la huella y el encadenamiento de registros de alta de VeriFactu"
+license = "MIT"
 
 [project.scripts]
 validar-verifactu = "validador_verifactu.cli:main"

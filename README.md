@@ -154,6 +154,12 @@ implementación y a quién afecta, está en
   Impuesto sobre Sociedades, y antes del 1 de julio de 2027 para el resto de
   obligados.
 
+## Licencia
+
+MIT; el texto completo está en [LICENSE](LICENSE). Cubre el código y la
+documentación de este repositorio, no los documentos de la AEAT, que no se
+incluyen.
+
 ---
 
 Esto es una implementación de referencia probada sobre datos sintéticos. No es
