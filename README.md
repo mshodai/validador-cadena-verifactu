@@ -111,6 +111,14 @@ las incidencias, no solo la primera.
 - No firma registros ni comprueba firmas electrónicas.
 - No se conecta a la AEAT ni remite nada.
 
+El encadenamiento por sí solo no detecta una cadena reescrita por completo. Si
+alguien altera un registro y recalcula su huella y todas las posteriores, cada
+registro vuelve a cuadrar con sus datos y con el anterior, y la validación pasa
+sin incidencias. Esa garantía no la aporta la huella, sino otros mecanismos: la
+firma electrónica de los registros en los SIF que no son VERI\*FACTU, y la
+remisión inmediata de cada registro a la AEAT en los que sí lo son. Esta
+herramienta no comprueba ninguno de los dos.
+
 El primer registro de la lista se trata como el primer registro del sistema.
 Si se valida un tramo parcial de una cadena, su primer registro dará E02, porque
 su campo `Huella` apunta a un registro que no está en la lista. En ese caso, el
