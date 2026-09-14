@@ -8,6 +8,9 @@ comportamiento único para la huella de los registros de alta. Las referencias
 "p. N" remiten a la paginación del PDF, igual que en
 [campos-huella-alta.md](campos-huella-alta.md).
 
+Los puntos 1 a 11 proceden del PDF. El punto 12 no: surge al validar una cadena
+de registros, algo que el PDF no describe.
+
 **Criterio.** Esta implementación no resuelve ninguna. Donde el documento
 admite más de una lectura, el código hace lo mínimo que reproduce los vectores
 oficiales (p. 10–11) y lo señala con un comentario `# AMBIGÜEDAD:`. "Esta
@@ -23,8 +26,9 @@ ASCII.
 validador la recalcula para comprobarla. Si los dos resuelven una ambigüedad de
 forma distinta, obtienen huellas distintas para el mismo registro, y el
 validador informa E01 aunque el registro sea correcto según la lectura del
-emisor. E02 no depende de ninguna de estas ambigüedades: compara las huellas
-declaradas, sin recalcular nada.
+emisor. E02 no depende de las ambigüedades 1 a 11: compara las huellas
+declaradas, sin recalcular nada. El punto 12 es distinto: afecta solo al
+validador y puede dar tanto E01 como E02.
 
 ---
 
@@ -267,3 +271,51 @@ documento no dice qué criterio prevalece si no coincidieran.
 vectores oficiales se reproducen con ese orden.
 
 **A quién afecta.** A ambos.
+
+---
+
+## 12. Cómo se comparan las huellas al validar
+
+Esta ambigüedad **no procede del PDF, sino del acto de validar**. El documento
+define cómo se calcula la huella, pero no cómo se comprueba. Surge en
+`validar_cadena`, no en `canonicalizar`.
+
+**Qué dice la especificación.** Nada sobre comparar huellas. Define cómo se
+calcula la huella (p. 5–7) y su formato: "en sistema hexadecimal", "en
+mayúsculas" y de 64 caracteres (p. 9). También dice dónde se escribe la huella
+del propio registro (`RegistroAlta/Huella`, p. 9) y dónde la del anterior
+(`Encadenamiento/RegistroAnterior/Huella`, p. 5), y que en el primer registro
+"no será necesario informar los campos de los bloques "RegistroAnterior""
+(p. 9). El recorte de los espacios de los extremos se define para los valores
+que entran en la concatenación (p. 6), no para ninguna otra operación.
+
+**Por qué no determina un comportamiento único.** Validar exige dos
+comparaciones que el documento no describe: la huella declarada frente a la
+recalculada (E01), y el campo `Huella` frente a la huella declarada del
+registro anterior (E02). El documento no dice si esas comparaciones deben
+tolerar diferencias de forma:
+
+- **Espacios en los extremos.** El campo `Huella` entra recortado en la
+  concatenación, así que `" 3C46…"` y `"3C46…"` producen la misma huella del
+  registro. No se dice si, al comprobar el encadenamiento, esos dos valores
+  cuentan como iguales.
+- **Mayúsculas y minúsculas.** La p. 9 exige mayúsculas, pero no dice si una
+  huella en minúsculas es otra huella o la misma huella mal formateada.
+- **Qué es un campo `Huella` "vacío" en el primer registro.** Puede estar
+  ausente, sin contenido o solo con espacios.
+
+**Qué hace esta implementación.** Compara el texto exacto, sin recortar ni
+cambiar mayúsculas y minúsculas. Un campo ausente o con valor `None` se trata
+como vacío, igual que en `canonicalizar`. En consecuencia:
+
+- una `HuellaPropia` en minúsculas o con espacios en los extremos da E01,
+  aunque sea la huella correcta. Si el registro siguiente escribe esa huella en
+  mayúsculas, como exige la p. 9, ese registro da además E02;
+- un campo `Huella` con espacios en los extremos da E02, aunque la huella del
+  propio registro, que lo recorta, sea correcta;
+- en el primer registro, `Huella` = `"   "` da E02, aunque `canonicalizar` lo
+  trate como vacío al calcular la huella.
+
+**A quién afecta.** Al validador. El emisor no compara huellas; solo influye en
+el resultado si escribe las huellas en minúsculas o con espacios en los
+extremos.
