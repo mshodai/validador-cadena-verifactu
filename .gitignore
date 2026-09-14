@@ -10,3 +10,7 @@ env/
 
 # Sistema
 .DS_Store
+
+# Documentos de la AEAT: no se redistribuyen. Sus URL están en
+# docs/fuentes/FUENTES.md.
+docs/fuentes/*.pdf
