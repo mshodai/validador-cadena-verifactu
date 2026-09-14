@@ -138,7 +138,7 @@ La tabla de revisiones describe la versión 0.1.2 como "Aclaración tratamiento
 de valores numéricos en el hash (ImporteTotal y/o CuotaTotal)" (p. 1).
 
 El documento no dice qué cadena exacta hay que poner en la concatenación en
-estos casos. Véase "Ambigüedades detectadas".
+estos casos. Véase la ambigüedad 1 en [ambiguedades.md](ambiguedades.md).
 
 ---
 
@@ -272,87 +272,5 @@ F7B94CFD8924EDFF273501B01EE5153E4CE8F259766F88CF6ACB8935802A2B97
 
 ## Ambigüedades detectadas
 
-Se enumeran sin resolverlas.
-
-1. **Qué cadena se usa para los campos numéricos.** La p. 6 dice que los
-   valores con uno o dos decimales "se tratarán indistintamente", "sin tener
-   relevancia los ceros a la derecha", y que `123.1` "se tratará correctamente,
-   de la misma forma que" `123.10`. No dice qué texto va en la concatenación:
-   - si hay que normalizar a una forma canónica (y cuál), o
-   - si se usa el texto literal del XML y "igualmente válidos" solo significa
-     que se acepta cualquiera de las dos formas.
-
-   Las dos lecturas producen huellas distintas para `123.1` y `123.10`. Los
-   vectores de prueba (p. 10–11) usan solo valores con dos decimales y el
-   último distinto de cero (`12.35`, `123.45`), así que no permiten distinguir
-   entre ellas.
-
-2. **Qué campos son "numéricos".** La p. 6 habla de "los campos numéricos" sin
-   enumerarlos. Solo la tabla de revisiones (p. 1) menciona "ImporteTotal y/o
-   CuotaTotal". No queda claro si la regla se limita a esos dos campos.
-
-3. **Numéricos fuera del caso de uno o dos decimales.** La regla solo habla de
-   valores "con una o dos posiciones en los decimales". No dice cómo tratar
-   valores sin decimales (por ejemplo `123` frente a `123.0` o `123.00`), ceros
-   a la izquierda, signo, ni otros separadores decimales.
-
-4. **El ejemplo Java no aplica la regla numérica.** El código de la p. 8 solo
-   hace `trim()` y sustituye `null` por la cadena vacía. No trata los ceros a la
-   derecha, así que no coincide con el texto de la p. 6 ni sirve para decidir
-   la ambigüedad 1.
-
-5. **Qué cuenta como "espacio".** La p. 6 habla de eliminar "los espacios al
-   inicio y al final". No precisa si incluye otros caracteres en blanco
-   (tabuladores, saltos de línea, espacio de no separación u otros). El ejemplo
-   Java usa `trim()`, pero el documento no define qué caracteres elimina ese
-   método.
-
-6. **Qué es "la misma información contenida en el campo del fichero XML".** La
-   p. 6 no aclara si el valor es el texto tal cual aparece en el fichero (con
-   referencias de entidad o de carácter como `&amp;` sin resolver) o el valor
-   ya interpretado por un procesador XML. Tampoco dice nada sobre normalización
-   Unicode de caracteres no ASCII antes de codificar en UTF-8 (p. 7).
-
-7. **Valores que contienen `&` o `=`.** La cadena usa `&` como separador de
-   pares y `=` entre nombre y valor (p. 6), pero el documento no dice qué hacer
-   si un valor (por ejemplo `NumSerieFactura`) contiene esos caracteres. El
-   código de la p. 8 define un método `getValorCampoEncoded`, que aplica
-   `URLEncoder.encode(valor, "UTF-8")`, pero no lo llama nunca: la construcción
-   de la cadena de alta usa `getValorCampo`, sin codificar. El documento no
-   explica si la codificación URL forma parte o no de la especificación.
-
-8. **Formato de `FechaExpedicionFactura` en el ejemplo Java.** Según la p. 6,
-   el valor es el contenido del XML. Sin embargo, `calcularHuellaAlta` (p. 8)
-   recibe la fecha de expedición como `Date` y la pasa por un método
-   `formatea(fechaExpedicion)` que no aparece definido en el documento. No
-   queda claro si la fecha se transforma o se toma literal del XML, ni con qué
-   patrón se formatearía. El único dato de formato es el ejemplo `01-01-2024`
-   (p. 10–11).
-
-9. **El ejemplo Java no se puede ejecutar tal como está.** Además de
-   `formatea`, usa una clase `Base16` con constructor `Base16(false)` y método
-   `encodeAsString` que el documento no define ni importa, y no explica el
-   significado del argumento `false` (p. 8). El requisito de hexadecimal en
-   mayúsculas sale solo del texto de la p. 9. También hay incoherencias
-   menores en el código:
-   - el parámetro se llama `fechaHoraUsoRegistro` ("Uso"), pero el campo es
-     `FechaHoraHusoGenRegistro` ("Huso");
-   - los ejemplos de las p. 10–11 llaman a una función `calcularHuella(...)`
-     con la cadena ya montada, y esa función no existe en el código de la p. 8
-     (allí están `getHashVerifactu(String)` y `calcularHuellaAlta(...)` con
-     parámetros separados).
-
-10. **El algoritmo depende de documentos externos no incluidos.** La p. 4
-    remite a la "Lista L12 del apartado 6 del anexo de la orden" y fija SHA-256
-    solo "en la fecha de publicación de este documento". La orden aparece como
-    "Orden XXXXXXX" (p. 3), un marcador sin resolver. El PDF no permite saber
-    si la lista L12 admite o admitirá otros algoritmos. En ese caso, la
-    longitud de 64 caracteres de la p. 9 podría no aplicarse, y el documento
-    tampoco dice cómo se indica en el registro qué algoritmo se ha usado.
-
-11. **Doble criterio de orden, uno de ellos no verificable.** La p. 5 dice que
-    el orden es "el orden enunciado" y, a la vez, que "coincide con su
-    aparición en los correspondientes diseños de registros publicados en el
-    anexo de la orden". Ese anexo no está incluido en el PDF, así que la
-    coincidencia no se puede comprobar con este documento, y el documento no
-    dice qué criterio prevalece si no coincidieran.
+Se han trasladado a [ambiguedades.md](ambiguedades.md), junto con lo que hace
+esta implementación en cada caso.
