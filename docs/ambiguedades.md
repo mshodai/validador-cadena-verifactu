@@ -18,9 +18,10 @@ implementación" se refiere a `canonicalizar` y `calcular_huella`
 (`src/validador_verifactu/huella.py`) y a `validar_cadena`
 (`src/validador_verifactu/cadena.py`).
 
-Los vectores oficiales no sirven para decidir ninguna: sus valores no tienen
-espacios en los extremos, ni ceros a la derecha, ni caracteres `&`, `=` o no
-ASCII.
+Los vectores oficiales solo ayudan en un caso: descartan que los valores se
+codifiquen como URL (ambigüedad 7). Para el resto no sirven: sus valores no
+tienen espacios en los extremos, ni ceros a la derecha, ni caracteres `&`, `=`
+o no ASCII.
 
 **A quién afecta.** El emisor calcula la huella al generar el registro; el
 validador la recalcula para comprobarla. Si los dos resuelven una ambigüedad de
@@ -182,20 +183,90 @@ CLI); si lo hace con un procesador XML, las referencias llegarán resueltas.
 `URLEncoder.encode(valor, "UTF-8")`, pero no lo llama nunca: la cadena de alta se
 construye con `getValorCampo`, sin codificar.
 
-**Por qué no determina un comportamiento único.** Si un valor (por ejemplo,
-`NumSerieFactura`) contiene `&` o `=`, codificarlo o no produce cadenas
-distintas, y el documento no dice si la codificación URL forma parte de la
-especificación. Sin codificar, además, dos registros distintos pueden producir
-la misma cadena. Por ejemplo, `NumSerieFactura` = `1&FechaExpedicionFactura=01-01-2024`
-con `FechaExpedicionFactura` vacía, y `NumSerieFactura` = `1` con
-`FechaExpedicionFactura` = `01-01-2024&FechaExpedicionFactura=`, dan los dos
-`…&NumSerieFactura=1&FechaExpedicionFactura=01-01-2024&FechaExpedicionFactura=&TipoFactura=…`
-y, por tanto, la misma huella. Si los diseños de registro permiten esos valores
-es algo que este documento no dice.
+**Por qué no determina un comportamiento único.** El documento no dice qué hacer
+si un valor contiene `&` o `=`, ni si la codificación URL forma parte de la
+especificación. Los vectores oficiales sí descartan codificar el valor entero
+con `URLEncoder`: contienen `/`, `:` y `+` (`12345678/G33`,
+`2024-01-01T19:20:30+01:00`), que se convertirían en `%2F`, `%3A` y `%2B`, y las
+huellas oficiales solo se reproducen sin codificar. Lo que queda abierto es si
+`&` y `=` deben escaparse de alguna otra forma: los vectores no contienen
+ninguno de los dos y el documento no lo dice.
 
-**Qué hace esta implementación.** No codifica: usa el valor tal cual.
+**¿Pueden dos registros distintos producir la misma cadena?** La serialización
+no es inyectiva por diseño: como no se escapa nada, un valor que contenga
+`&Nombre=` puede imitar el límite entre dos campos. Si cada campo admitiera
+cualquier texto, dos registros distintos podrían dar la misma cadena y, por
+tanto, la misma huella. Por ejemplo, `NumSerieFactura` =
+`1&FechaExpedicionFactura=01-01-2024` con `FechaExpedicionFactura` vacía, y
+`NumSerieFactura` = `1` con `FechaExpedicionFactura` =
+`01-01-2024&FechaExpedicionFactura=`, dan los dos
+`…&NumSerieFactura=1&FechaExpedicionFactura=01-01-2024&FechaExpedicionFactura=&TipoFactura=…`.
+**Este ejemplo solo funciona con valores que la AEAT rechaza**: los dos
+registros llevan una `FechaExpedicionFactura` que no cumple el esquema XSD, y el
+primero, además, un `=` en `NumSerieFactura`, que el documento de Validaciones
+prohíbe.
 
-**A quién afecta.** A ambos.
+Con registros válidos la colisión no es posible, pero la garantía no está en la
+especificación de la huella, que no la menciona. Está en otros dos documentos:
+
+- **El esquema XSD** (`SuministroInformacion.xsd`). No restringe los caracteres
+  de `NumSerieFactura`: su tipo, `TextoIDFacturaType`, es un `string` de 1 a 60
+  caracteres sin `pattern`. Tampoco los de `IDEmisorFactura` (`NIFType`,
+  `string` de longitud 9) ni los de `Huella` (`TextMax64Type`, `string` de
+  hasta 64). Pero cierra el formato de los otros cinco campos (fecha con
+  patrón, enumeración, importes con patrón y `xs:dateTime`, ninguno de los
+  cuales admite `&` ni `=`) y limita la longitud de esos tres. Eso basta,
+  porque imitar un límite exige meter dentro de un campo libre un separador
+  completo y todo lo que hay hasta el siguiente campo libre. `&NumSerieFactura=`
+  mide 17 caracteres y no cabe en los 9 de `IDEmisorFactura`. Entre
+  `NumSerieFactura` y `Huella` hay cuatro campos cerrados, y el tramo más corto
+  que habría que desplazar
+  (`&FechaExpedicionFactura=dd-mm-aaaa&TipoFactura=F1&CuotaTotal=1&ImporteTotal=1&Huella=`)
+  mide 85 caracteres, más que los 60 y los 64 permitidos. Sin esos límites de
+  longitud, la colisión sí se puede construir respetando los formatos cerrados.
+- **El documento de Validaciones** (AEAT, versión 1.2.2, sección 3.1.3.1, p. 8).
+  `NumSerieFactura` "solo puede contener caracteres ASCII del 32 a 126" y no
+  admite `"` (34), `'` (39), `<` (60), `>` (62) ni `=` (61). Si ningún valor
+  contiene `=`, todos los `=` de la cadena son separadores y la cadena se
+  descompone de una sola forma, aunque haya `&`. El `&` (ASCII 38) no figura
+  entre los caracteres prohibidos; con `&` y sin `=` tampoco hay colisión.
+
+Las dos conclusiones se comprueban en
+[`tests/test_colision.py`](../tests/test_colision.py), que cuenta todas las
+formas de descomponer una cadena en valores válidos. Con valores que solo
+contienen `&`, y con 20 000 registros aleatorios con `&` y `=` en los tres
+campos libres dentro de las longitudes del XSD, siempre hay una única
+descomposición. Sin esos límites de longitud, el mismo test construye una
+colisión.
+
+Esas garantías tienen límites:
+
+- Son comprobaciones que la AEAT hace al recibir los registros. En la modalidad
+  NO VERI\*FACTU los registros se conservan en local y pueden no enviarse nunca;
+  mientras no se envían, nada comprueba que cumplan el XSD ni las validaciones.
+- Cuando se envían por requerimiento, las validaciones de negocio no rechazan
+  registros: "todos los errores provocados por validaciones de negocio se
+  marcarán como errores admisibles", salvo los de identificación de NIF o
+  IdOtro (Validaciones, sección 4.3.2, p. 22). Un `NumSerieFactura` con `=` se
+  aceptaría con un aviso. El formato de `Huella` (64 caracteres hexadecimales
+  en mayúsculas) tampoco provoca nunca un rechazo, solo un aviso (sección
+  3.1.3.18, p. 15). En cambio, un envío que no cumple el esquema XSD se rechaza
+  entero (sección 4.1, p. 20). Para los registros que llegan a enviarse, la
+  garantía efectiva es la del XSD.
+
+Aparte de esto, la cadena no distingue lo que la especificación manda ignorar:
+los espacios de los extremos (ambigüedad 5) y un campo ausente frente a uno
+vacío. Eso es deliberado, no una colisión.
+
+**Qué hace esta implementación.** No codifica: usa el valor tal cual, que es lo
+que reproduce los vectores. Tampoco comprueba el XSD ni las validaciones, así
+que dos entradas JSON con valores fuera de esos formatos pueden producir la
+misma cadena.
+
+**A quién afecta.** A ambos si uno de los dos escapa `&` o `=` y el otro no.
+La colisión solo afecta a registros que no cumplen el XSD: registros NO
+VERI\*FACTU que nunca se envían, o entradas del validador que no proceden de un
+XML válido.
 
 ## 8. Formato de `FechaExpedicionFactura` en el ejemplo Java
 

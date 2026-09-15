@@ -134,8 +134,10 @@ Esta implementación no resuelve ninguno: hace lo mínimo que reproduce los
 vectores oficiales. Un sistema que los haya resuelto de otra forma puede
 obtener E01 en registros que, según su lectura, son correctos. La
 especificación tampoco dice si hay que escapar `&` y `=`, y esta implementación
-no lo hace; por eso dos registros distintos pueden producir la misma cadena de
-entrada y, por tanto, la misma huella. Cada punto, con lo que hace esta
+no lo hace. Eso permitiría que dos registros distintos produjeran la misma
+huella, pero solo con valores que el esquema XSD de la AEAT no admite: la
+garantía existe, aunque viene de ese esquema y no de la especificación de la
+huella. Cada punto, con lo que hace esta
 implementación y a quién afecta, está en
 [docs/ambiguedades.md](docs/ambiguedades.md).
 
