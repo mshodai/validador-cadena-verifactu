@@ -11,6 +11,8 @@ Artículos:
   sobre por qué la concatenación de la huella no colisiona con registros válidos.
 - [¿Basta la especificación de la huella para implementarla?](https://mshodai.github.io/validador-cadena-verifactu/el-esquema-decide.html),
   sobre las decisiones que no toma la especificación y fija el esquema XSD.
+- [¿Qué comprueba Hacienda al recibir tus registros en un requerimiento?](https://mshodai.github.io/validador-cadena-verifactu/que-comprueba-hacienda.html),
+  sobre qué valida la AEAT y qué no figura entre sus validaciones documentadas.
 
 ## El escenario
 
