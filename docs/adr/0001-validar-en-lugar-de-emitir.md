@@ -16,7 +16,7 @@ producción y tenencia de programas y sistemas informáticos que permitan la
 manipulación de los datos contables y de gestión". El Reglamento aprobado por el Real Decreto 1007/2023 desarrolla
 esa obligación para los sistemas informáticos de facturación (SIF), y la Orden
 HAC/1177/2024 fija sus especificaciones técnicas. El calendario de
-obligatoriedad está en el [README](../../README.md#fuentes).
+obligatoriedad está en el [README](https://github.com/mshodai/validador-cadena-verifactu/blob/main/README.md#fuentes).
 
 El mecanismo central es la huella. Cada registro de facturación incluye un
 SHA-256 calculado sobre algunos de sus campos y sobre la huella del registro
@@ -86,7 +86,7 @@ declarada del anterior, no con la recalculada. El SIF encadena cada registro
 nuevo anotando en él la huella que figura en el anterior (FAQ, sección 15,
 p. 28), así que una rotura aparece como una incidencia localizada y no se
 arrastra a todos los registros siguientes. El corpus
-[`fixtures/cadena-rota.json`](../../fixtures/cadena-rota.json) contiene una
+[`fixtures/cadena-rota.json`](https://github.com/mshodai/validador-cadena-verifactu/blob/main/fixtures/cadena-rota.json) contiene una
 rotura de cada tipo en medio de una cadena válida.
 
 **Las ambigüedades de la especificación se convierten en decisiones explícitas

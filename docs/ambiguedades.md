@@ -232,7 +232,7 @@ especificación de la huella, que no la menciona. Está en otros dos documentos:
   entre los caracteres prohibidos; con `&` y sin `=` tampoco hay colisión.
 
 Las dos conclusiones se comprueban en
-[`tests/test_colision.py`](../tests/test_colision.py), que cuenta todas las
+[`tests/test_colision.py`](https://github.com/mshodai/validador-cadena-verifactu/blob/main/tests/test_colision.py), que cuenta todas las
 formas de descomponer una cadena en valores válidos. Con valores que solo
 contienen `&`, y con 20 000 registros aleatorios con `&` y `=` en los tres
 campos libres dentro de las longitudes del XSD, siempre hay una única
