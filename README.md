@@ -5,8 +5,12 @@ tienes que enviarlos tal como se generaron. Esta herramienta comprueba antes que
 la cadena está intacta: que la huella de cada registro cuadra con sus datos y
 que ninguno se ha perdido ni alterado por el camino.
 
-Artículo: [¿Pueden dos facturas distintas tener la misma huella?](https://mshodai.github.io/validador-cadena-verifactu/),
-sobre por qué la concatenación de la huella no colisiona con registros válidos.
+Artículos:
+
+- [¿Pueden dos facturas distintas tener la misma huella?](https://mshodai.github.io/validador-cadena-verifactu/),
+  sobre por qué la concatenación de la huella no colisiona con registros válidos.
+- [¿Basta la especificación de la huella para implementarla?](https://mshodai.github.io/validador-cadena-verifactu/el-esquema-decide.html),
+  sobre las decisiones que no toma la especificación y fija el esquema XSD.
 
 ## El escenario
 
