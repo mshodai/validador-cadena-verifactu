@@ -171,6 +171,12 @@ implementación y a quién afecta, está en
   Impuesto sobre Sociedades, y antes del 1 de julio de 2027 para el resto de
   obligados.
 
+## Otro repositorio del proyecto
+
+[calculo-titularidad-real](https://github.com/mshodai/calculo-titularidad-real)
+calcula la titularidad real de una sociedad bajo la Ley 10/2010 y bajo el
+Reglamento (UE) 2024/1624 (AMLR), y compara los dos regímenes.
+
 ## Licencia
 
 MIT; el texto completo está en [LICENSE](LICENSE). Cubre el código y la
