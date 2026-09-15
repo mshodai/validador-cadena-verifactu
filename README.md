@@ -83,6 +83,12 @@ registro (`RegistroAlta/Huella`). Todos los valores deben ser cadenas de texto,
 incluidos los importes: como número JSON, `121.00` se leería como `121.0` y la
 huella cambiaría. Un campo ausente o `null` se trata como vacío.
 
+Cada valor puede ser el texto literal del elemento XML o el valor ya
+normalizado por el esquema. En `FechaHoraHusoGenRegistro`, que en el esquema XSD
+es `xs:dateTime`, el validador elimina antes el espacio en blanco que el esquema
+colapsa (espacio, tabulador, salto de línea y retorno de carro), así que un XML
+indentado da el mismo resultado. En los demás campos, el texto se usa tal cual.
+
 ## Qué comprueba
 
 Dos reglas, en cada registro de la secuencia:

@@ -13,10 +13,13 @@ de registros, algo que el PDF no describe.
 
 **Criterio.** Esta implementación no resuelve ninguna. Donde el documento
 admite más de una lectura, el código hace lo mínimo que reproduce los vectores
-oficiales (p. 10–11) y lo señala con un comentario `# AMBIGÜEDAD:`. "Esta
+oficiales (p. 10–11) y lo señala con un comentario `# AMBIGÜEDAD:`. La única
+excepción es una parte de la ambigüedad 6, que el esquema XSD resuelve para
+`FechaHoraHusoGenRegistro`; está señalada en el código con `# DECISIÓN`. "Esta
 implementación" se refiere a `canonicalizar` y `calcular_huella`
-(`src/validador_verifactu/huella.py`) y a `validar_cadena`
-(`src/validador_verifactu/cadena.py`).
+(`src/validador_verifactu/huella.py`), a `validar_cadena`
+(`src/validador_verifactu/cadena.py`) y a `normalizar_segun_xsd`
+(`src/validador_verifactu/xsd.py`).
 
 Los vectores oficiales solo ayudan en un caso: descartan que los valores se
 codifiquen como URL (ambigüedad 7). Para el resto no sirven: sus valores no
@@ -123,15 +126,15 @@ otros caracteres en blanco. El ejemplo Java tampoco lo resuelve: el PDF no dice
 qué elimina `trim()`. Fuera del PDF, `trim()` de Java y `strip()` de Python, que
 parecen equivalentes, eliminan conjuntos de caracteres distintos:
 
-| Caracteres en los extremos                                  | Java `String.trim()` | Python `str.strip()` |
-|-------------------------------------------------------------|:--------------------:|:--------------------:|
-| Espacio (U+0020)                                            | sí                   | sí                   |
-| Tabulador y saltos de línea (U+0009–U+000D)                 | sí                   | sí                   |
-| Separadores de información (U+001C–U+001F)                  | sí                   | sí                   |
-| Otros caracteres de control (U+0000–U+0008, U+000E–U+001B)  | sí                   | no                   |
-| Espacio de no separación (U+00A0)                           | no                   | sí                   |
-| Otros espacios Unicode (U+1680, U+2000–U+200A, U+202F, U+205F, U+3000) | no        | sí                   |
-| Separadores de línea (U+0085, U+2028, U+2029)               | no                   | sí                   |
+| Caracteres en los extremos                                  | Java `String.trim()` | Python `str.strip()` | ¿Admitidos en XML 1.0? |
+|-------------------------------------------------------------|:--------------------:|:--------------------:|:----------------------:|
+| Espacio (U+0020)                                            | sí                   | sí                   | sí                     |
+| Tabulador, salto de línea y retorno de carro (U+0009, U+000A, U+000D) | sí         | sí                   | sí                     |
+| Tabulación vertical, salto de página y separadores de información (U+000B, U+000C, U+001C–U+001F) | sí | sí   | no                     |
+| Otros caracteres de control (U+0000–U+0008, U+000E–U+001B)  | sí                   | no                   | no                     |
+| Espacio de no separación (U+00A0)                           | no                   | sí                   | sí                     |
+| Otros espacios Unicode (U+1680, U+2000–U+200A, U+202F, U+205F, U+3000) | no        | sí                   | sí                     |
+| Separadores de línea (U+0085, U+2028, U+2029)               | no                   | sí                   | sí                     |
 
 Fuentes: para Java, la documentación de `String.trim()`, que elimina los
 caracteres con código menor o igual que U+0020 (no se ha podido comprobar
@@ -145,15 +148,30 @@ Un caso práctico: si el XML está indentado y el valor queda en su propia líne
 (`<NumSerieFactura>` seguido de un salto de línea y sangría), `trim()` y
 `strip()` eliminan el salto y la sangría; recortar solo U+0020 no los elimina.
 
+En un registro, que es un documento XML, la tabla se reduce. XML 1.0 no admite
+los caracteres de control de la tercera y la cuarta fila, ni siquiera escritos
+como referencia de carácter, así que lo que Java recorta y Python no nunca
+aparece en un registro. La divergencia entre las dos queda en un solo sentido:
+los espacios Unicode de las tres últimas filas, que Python recorta y Java no.
+Además, `NumSerieFactura` solo admite ASCII del 32 al 126 (Validaciones,
+versión 1.2.2, sección 3.1.3.1, p. 8), y en ese rango el único carácter que se
+recorta es el espacio, que las tres variantes tratan igual. La divergencia solo
+es alcanzable en los campos cuyo tipo XSD admite cualquier texto
+(`IDEmisorFactura` y `Huella`) y en `NumSerieFactura` cuando esa validación no
+se aplica con rechazo (ver la ambigüedad 7).
+
 **Qué hace esta implementación.** Solo elimina el espacio U+0020
 (`valor.strip(" ")`), que es la lectura más literal de "espacios" y reproduce el
 ejemplo de la p. 6 y los vectores oficiales. No equivale a `strip()` de Python
-ni a `trim()` de Java.
+ni a `trim()` de Java. La excepción es `FechaHoraHusoGenRegistro`: antes de este
+recorte pasa por el colapsado de su tipo XSD (ambigüedad 6), que en ese campo
+elimina también tabuladores, saltos de línea y retornos de carro.
 
 **A quién afecta.** A ambos. Un emisor que siga el ejemplo Java y tenga un
-tabulador o un salto de línea en el extremo de un valor obtendrá una huella que
-esta implementación considera E01. Con un espacio de no separación ocurre lo
-mismo frente a un emisor que use `strip()` de Python.
+tabulador o un salto de línea en el extremo de un valor que no sea la fecha de
+generación obtendrá una huella que esta implementación considera E01. Con un
+espacio de no separación ocurre lo mismo frente a un emisor que use `strip()`
+de Python.
 
 ## 6. Qué es "la misma información contenida en el campo del fichero XML"
 
@@ -168,10 +186,40 @@ Tampoco dice nada sobre normalización Unicode antes de codificar en UTF-8: por
 ejemplo, "é" como un solo carácter o como "e" seguida de un acento combinable,
 que dan bytes distintos.
 
-**Qué hace esta implementación.** Usa el valor exactamente como lo recibe: no
-resuelve referencias ni aplica normalización Unicode. La decisión recae en quien
-extrae los valores del XML para construir la entrada (por ejemplo, el JSON de la
-CLI); si lo hace con un procesador XML, las referencias llegarán resueltas.
+En los campos tipados, el texto y el valor pueden no coincidir. En el esquema
+XSD (`SuministroInformacion.xsd`), siete de los ocho campos que entran en la
+huella derivan de `xs:string`, cuya faceta `whiteSpace` es `preserve`: su texto
+es su valor. El octavo, `FechaHoraHusoGenRegistro`, es `xs:dateTime`, cuya
+faceta es `collapse` y no se puede cambiar (XML Schema 1.0, parte 2, §3.2.7 y
+§4.3.6). En un XML indentado, el texto literal de ese elemento lleva saltos de
+línea y sangría, y su valor según el esquema no. Un analizador XML corriente
+devuelve el texto; uno que aplique el esquema devuelve el valor.
+
+**Qué hace esta implementación.** En `FechaHoraHusoGenRegistro` resuelve la
+ambigüedad a favor del valor según el esquema. Antes de calcular la huella,
+`normalizar_segun_xsd` aplica el colapsado de `xs:dateTime`: sustituye cada
+secuencia de espacio, tabulador, salto de línea o retorno de carro (U+0020,
+U+0009, U+000A, U+000D) por un espacio y elimina los de los extremos. No toca
+el espacio de no separación ni otros espacios Unicode, que XML Schema no
+considera espacio en blanco. Hay tres razones para resolverla aquí:
+
+- el esquema fija la faceta de forma normativa, así que "la misma información
+  contenida en el campo" es el valor colapsado;
+- con ese valor coinciden el `trim()` de Java, el `strip()` de Python y el
+  propio esquema; solo la lectura anterior de esta implementación daba otro;
+- el colapsado es idempotente, así que el resultado es el mismo si la entrada
+  ya venía normalizada o si trae el texto literal del XML, y el validador no
+  necesita saber cuál de los dos recibe.
+
+Sin esto, un registro conforme con el XML indentado daba E01. No todos los
+validadores XSD aplican la norma igual: libxml2 2.14 rechaza un `xs:dateTime`
+con espacio en blanco alrededor, aunque la norma lo admite.
+
+En el resto de campos, y en todo lo demás de este punto, usa el valor
+exactamente como lo recibe: no resuelve referencias ni aplica normalización
+Unicode. La decisión recae en quien extrae los valores del XML para construir la
+entrada (por ejemplo, el JSON de la CLI); si lo hace con un procesador XML, las
+referencias llegarán resueltas.
 
 **A quién afecta.** A ambos.
 
