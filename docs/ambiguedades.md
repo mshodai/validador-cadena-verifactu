@@ -298,9 +298,12 @@ Esas garantías tienen límites:
   IdOtro (Validaciones, sección 4.3.2, p. 22). Un `NumSerieFactura` con `=` se
   aceptaría con un aviso. El formato de `Huella` (64 caracteres hexadecimales
   en mayúsculas) tampoco provoca nunca un rechazo, solo un aviso (sección
-  3.1.3.18, p. 15). En cambio, un envío que no cumple el esquema XSD se rechaza
-  entero (sección 4.1, p. 20). Para los registros que llegan a enviarse, la
-  garantía efectiva es la del XSD.
+  3.1.3.18, p. 15). En cambio, un valor que no cumple el esquema XSD por
+  formato, longitud o valores permitidos es un error sintáctico y rechaza el
+  registro. Solo ese registro: el mensaje entero solo se rechaza por errores
+  estructurales o por errores sintácticos en la cabecera (sección 3.1, p. 6). Al
+  no ser un error de negocio, la sección 4.3.2 no lo convierte en admisible.
+  Para los registros que llegan a enviarse, la garantía efectiva es la del XSD.
 
 Aparte de esto, la cadena no distingue lo que la especificación manda ignorar:
 los espacios de los extremos (ambigüedad 5) y un campo ausente frente a uno
@@ -375,8 +378,10 @@ obligatorio `TipoHuella`, de tipo `TipoHuellaType`, que es una enumeración con
 un único valor, `01`, documentado como "SHA-256" (`SuministroInformacion.xsd`;
 el registro de anulación tiene el mismo elemento). El registro declara así el
 algoritmo, y el esquema vigente no admite otro: un registro que declare otro
-valor no cumple el esquema y se rechaza entero al enviarse (Validaciones,
-versión 1.2.2, sección 4.1, p. 20). El documento de Validaciones no menciona
+valor no cumple el esquema y se rechaza al enviarse. Se rechaza solo ese
+registro, porque el mensaje entero solo se rechaza por errores estructurales o
+por errores sintácticos en la cabecera (Validaciones, versión 1.2.2, sección
+3.1, p. 6). El documento de Validaciones no menciona
 `TipoHuella`, pero sí exige que la huella del registro anterior tenga el formato
 de salida de SHA-256, "64 caracteres en hexadecimal y en mayúsculas" (sección
 3.1.3.18, p. 15).

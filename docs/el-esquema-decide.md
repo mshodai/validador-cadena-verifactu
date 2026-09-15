@@ -34,9 +34,11 @@ registro de alta (`RegistroFacturacionAltaType`) tiene un elemento
 `TipoHuella`, de tipo `TipoHuellaType`, sin `minOccurs`, así que es obligatorio.
 `TipoHuellaType` es una enumeración con un único valor, `01`, documentado como
 "SHA-256". El registro de anulación tiene el mismo elemento. Un registro que
-declare otro valor no cumple el esquema, y un envío que no cumple el esquema se
-rechaza entero (AEAT, "Sistemas Informáticos de Facturación y Sistemas
-VERI\*FACTU. Validaciones", versión 1.2.2, 08/04/2026, sección 4.1, p. 20). El
+declare otro valor no cumple el esquema y se rechaza al enviarse. Se rechaza
+solo ese registro, porque el mensaje entero solo se rechaza por errores
+estructurales o por errores sintácticos en la cabecera (AEAT, "Sistemas
+Informáticos de Facturación y Sistemas VERI\*FACTU. Validaciones", versión
+1.2.2, 08/04/2026, sección 3.1, p. 6). El
 documento de Validaciones completa el cuadro por el lado del formato: la huella
 del registro anterior debe tener "64 caracteres en hexadecimal y en
 mayúsculas" (sección 3.1.3.18, p. 15).

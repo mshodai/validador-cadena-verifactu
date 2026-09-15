@@ -102,9 +102,11 @@ longitud 9), `NumSerieFactura` (`TextoIDFacturaType`, texto de 1 a 60, sin
 patrón) y `Huella` (`TextMax64Type`, texto de hasta 64). Pero los otros cinco
 tienen formato cerrado: la fecha de expedición sigue el patrón `dd-mm-aaaa`, el
 tipo de factura es una enumeración, los importes tienen un patrón numérico y la
-fecha de generación es un `xs:dateTime`. Ninguno admite `&` ni `=`. Un envío que
-no cumple el esquema se rechaza entero (Validaciones, versión 1.2.2, sección
-4.1, p. 20). A diferencia de las validaciones de negocio, esto también se aplica
+fecha de generación es un `xs:dateTime`. Ninguno admite `&` ni `=`. Un registro
+con un valor que no cumple el esquema se rechaza. Se rechaza solo ese registro,
+porque el mensaje entero solo se rechaza por errores estructurales o por
+errores sintácticos en la cabecera (Validaciones, versión 1.2.2, sección 3.1,
+p. 6). A diferencia de las validaciones de negocio, esto también se aplica
 en la remisión bajo requerimiento, en la que el servicio de la AEAT solo
 rechaza registros que incumplan el esquema XML o cuyo NIF de destinatario no
 exista en el censo (Aclaraciones a dudas de los desarrolladores, versión 1.3,
