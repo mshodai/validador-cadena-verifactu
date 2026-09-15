@@ -177,6 +177,9 @@ Este es uno de tres casos en los que la decisión sobre cómo se construye la
 cadena la toma el esquema y no la especificación de la huella. Los otros dos,
 el algoritmo y el espacio en blanco, están en
 [¿Basta la especificación de la huella de VERI\*FACTU para implementarla?](el-esquema-decide.md).
+Qué valida la AEAT cuando recibe los registros por un requerimiento, y qué no
+figura entre sus validaciones, está en
+[¿Qué comprueba Hacienda al recibir tus registros de facturación en un requerimiento?](que-comprueba-hacienda.md).
 
 ---
 

@@ -151,7 +151,10 @@ especificación de la huella siga diciendo lo mismo: un nuevo valor de
 
 El detalle de cada punto está en [ambiguedades.md](ambiguedades.md) (puntos 5,
 6, 7 y 10), y el código y los tests, en el
-[repositorio](https://github.com/mshodai/validador-cadena-verifactu).
+[repositorio](https://github.com/mshodai/validador-cadena-verifactu). Qué
+comprueba la AEAT de todo esto cuando recibe los registros por un requerimiento
+está en
+[¿Qué comprueba Hacienda al recibir tus registros de facturación en un requerimiento?](que-comprueba-hacienda.md).
 
 ---
 
