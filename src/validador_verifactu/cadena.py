@@ -1,4 +1,5 @@
 from validador_verifactu.huella import calcular_huella, canonicalizar
+from validador_verifactu.xsd import normalizar_segun_xsd
 
 
 def validar_cadena(registros: list[dict]) -> list[dict]:
@@ -6,12 +7,15 @@ def validar_cadena(registros: list[dict]) -> list[dict]:
 
     Cada registro es el diccionario que acepta `canonicalizar`, más la clave
     "HuellaPropia" con la huella que declaró el emisor (RegistroAlta/Huella).
+    Los valores pueden ser el texto literal de cada elemento XML: antes de
+    calcular la huella se normalizan según su tipo en el esquema XSD.
     El primer elemento de `registros` se trata como el primer registro del
     sistema.
 
     Cada incidencia es un diccionario con "codigo", "posicion" (índice del
     registro en `registros`, empezando en 0) y "mensaje".
     """
+    registros = [normalizar_segun_xsd(registro) for registro in registros]
     incidencias = []
     huella_anterior = ""
     for posicion, registro in enumerate(registros):
