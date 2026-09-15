@@ -358,7 +358,7 @@ resultado se comprueba contra los vectores oficiales.
 **A quién afecta.** A ambos, como referencia: quien porte el ejemplo Java tiene
 que completar los huecos con su propio criterio.
 
-## 10. El algoritmo depende de documentos externos no incluidos
+## 10. Qué algoritmo se usa y dónde se declara
 
 **Qué dice la especificación.** "El algoritmo a utilizar se detalla en la Lista
 L12 del apartado 6 del anexo de la orden" y "en la fecha de publicación de este
@@ -370,11 +370,31 @@ lista L12 admite o admitirá otros algoritmos. En ese caso, la longitud de 64
 caracteres de la p. 9 podría no aplicarse, y el documento tampoco dice cómo se
 indica en el registro qué algoritmo se ha usado.
 
-**Qué hace esta implementación.** Usa siempre SHA-256, sin selección de
-algoritmo. Un registro cuya huella se hubiera calculado con otro algoritmo daría
-E01.
+El esquema XSD responde a la mayor parte. `RegistroAlta` tiene un elemento
+obligatorio `TipoHuella`, de tipo `TipoHuellaType`, que es una enumeración con
+un único valor, `01`, documentado como "SHA-256" (`SuministroInformacion.xsd`;
+el registro de anulación tiene el mismo elemento). El registro declara así el
+algoritmo, y el esquema vigente no admite otro: un registro que declare otro
+valor no cumple el esquema y se rechaza entero al enviarse (Validaciones,
+versión 1.2.2, sección 4.1, p. 20). El documento de Validaciones no menciona
+`TipoHuella`, pero sí exige que la huella del registro anterior tenga el formato
+de salida de SHA-256, "64 caracteres en hexadecimal y en mayúsculas" (sección
+3.1.3.18, p. 15).
 
-**A quién afecta.** A ambos.
+Queda abierto lo siguiente:
+
+- el XSD no cita la lista L12, así que no puede confirmarse con estos documentos
+  que `TipoHuellaType` la reproduzca;
+- si una versión futura del esquema añadiera otro algoritmo, `TipoHuella`
+  indicaría cuál se usó, pero la longitud de la p. 9 y la validación de formato
+  de Validaciones tendrían que cambiar con él.
+
+**Qué hace esta implementación.** Usa siempre SHA-256, que es el único valor
+que admite `TipoHuella` en el esquema vigente. No lee `TipoHuella`: no es uno
+de los ocho campos de la huella y la entrada no lo incluye. Un registro cuya
+huella se hubiera calculado con otro algoritmo daría E01.
+
+**A quién afecta.** A ambos, solo si el esquema llega a admitir otro algoritmo.
 
 ## 11. Doble criterio de orden, uno de ellos no verificable
 
