@@ -171,6 +171,11 @@ en [ambiguedades.md](ambiguedades.md), en el punto 7. El código, los tests y la
 fuentes están en el
 [repositorio](https://github.com/mshodai/validador-cadena-verifactu).
 
+Este es uno de tres casos en los que la decisión sobre cómo se construye la
+cadena la toma el esquema y no la especificación de la huella. Los otros dos,
+el algoritmo y el espacio en blanco, están en
+[¿Basta la especificación de la huella de VERI\*FACTU para implementarla?](el-esquema-decide.md).
+
 ---
 
 Este análisis es de arquitectura de software, no asesoramiento jurídico.
