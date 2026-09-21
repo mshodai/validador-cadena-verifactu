@@ -1,3 +1,6 @@
 title: "Huella y encadenamiento en VERI*FACTU"
 description: "Análisis técnico de la huella de los registros de facturación de la AEAT y de cómo se comprueba una cadena de registros."
 lang: es
+
+plugins:
+  - jekyll-sitemap
