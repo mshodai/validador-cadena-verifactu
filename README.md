@@ -181,6 +181,10 @@ Reglamento (UE) 2024/1624 (AMLR), y compara los dos regímenes.
 calcula el estado de conservación de la documentación de prevención del
 blanqueo bajo la Ley 10/2010 y bajo el AMLR.
 
+[plazos-actualizacion-pbc](https://github.com/mshodai/plazos-actualizacion-pbc)
+calcula la fecha de la próxima revisión obligatoria de la información de un
+cliente bajo la Ley 10/2010 y bajo el AMLR.
+
 ## Licencia
 
 MIT; el texto completo está en [LICENSE](LICENSE). Cubre el código y la
